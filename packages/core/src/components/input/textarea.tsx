@@ -25,12 +25,10 @@ import {
   IxInputFieldComponent,
   ValidationResults,
 } from '../utils/input';
-import { A11yAttributes } from '../utils/a11y';
 import { makeRef } from '../utils/make-ref';
 import { TextareaElement } from './input.fc';
 import {
   getAriaAttributesForInput,
-  inheritHostAriaAttributes,
   mapValidationResult,
   onInputFocus,
   onInputBlurWithChange,
@@ -198,8 +196,6 @@ export class Textarea implements IxInputFieldComponent<string> {
   @State() isWarning = false;
   @State() isInvalidByRequired = false;
 
-  private inheritAriaAttributes: A11yAttributes = {};
-
   private readonly textAreaRef = makeRef<HTMLTextAreaElement>(() => {
     this.initResizeObserver();
   });
@@ -236,7 +232,6 @@ export class Textarea implements IxInputFieldComponent<string> {
 
   componentWillLoad() {
     this.updateFormInternalValue(this.value);
-    this.inheritAriaAttributes = inheritHostAriaAttributes(this.hostElement);
   }
 
   componentDidRender() {
@@ -436,10 +431,7 @@ export class Textarea implements IxInputFieldComponent<string> {
               value={this.value}
               placeholder={this.placeholder}
               textAreaRef={this.textAreaRef}
-              ariaAttributes={getAriaAttributesForInput(
-                this,
-                this.inheritAriaAttributes
-              )}
+              ariaAttributes={getAriaAttributesForInput(this)}
               onFocus={() => onInputFocus(this, this.value)}
               valueChange={(value) => this.valueChange.emit(value)}
               updateFormInternalValue={(value) =>
