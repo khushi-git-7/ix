@@ -114,26 +114,6 @@ export class Breadcrumb extends Mixin(...DefaultMixins) {
     this.itemClick.emit(item);
   }
 
-  /**
-   * Hidden items are rendered as dropdown items, which have no anchor of their own.
-   * Follow the item's link the same way the anchor of a visible item would.
-   */
-  private navigateToItem(item: HTMLIxBreadcrumbItemElement) {
-    if (!item.href) {
-      return;
-    }
-
-    const anchor = document.createElement('a');
-    anchor.href = item.href;
-    anchor.target = item.target ?? '_self';
-    if (item.rel) {
-      anchor.rel = item.rel;
-    }
-
-    // The anchor stays detached, so its click event does not reach any listeners on the page.
-    anchor.click();
-  }
-
   override componentDidLoad() {
     this.mutationObserver = createMutationObserver(() =>
       this.onChildMutation()
@@ -223,7 +203,6 @@ export class Breadcrumb extends Mixin(...DefaultMixins) {
                         breadcrumbKey: item.breadcrumbKey,
                         label,
                       });
-                      this.navigateToItem(item);
                     }}
                     onItemClick={(event) => event.stopPropagation()}
                   ></ix-dropdown-item>
